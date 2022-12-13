@@ -53,6 +53,7 @@ arrDelay = np.genfromtxt('.\VNFs.csv', delimiter=',', usecols=(1), max_rows=type
 population = np.random.randint(2, size = (net, typeVNF, redundantVNF))  # Creacion de la poblacion
 best_component = np.full((typeVNF*redundantVNF), 0).reshape(typeVNF, redundantVNF)
 best_delay = np.inf
+best_conf = 0
 while num_ite > 0:
     amend()
     conf = fitness()[1]
@@ -61,6 +62,7 @@ while num_ite > 0:
         if delays[i] < best_delay and conf[i] >= minConfiability:
             best_component = population[i]
             best_delay = delays[i]
+            best_conf = conf[i]
             print(best_delay)
     actualFitness = fitness()[0]
     tempChild = np.copy(population)
@@ -113,7 +115,7 @@ while num_ite > 0:
     population = tempPop
     population = population.reshape((net, typeVNF, redundantVNF))
     num_ite -= 1
-print(best_component, best_delay, sep='\n')
+print(best_component, best_delay, best_conf, sep='\n')
 # tiempo ejecución
 end = time.time()
 print('Tiempo de ejecución:', end - start,'segundos')
