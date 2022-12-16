@@ -1,6 +1,7 @@
 from itertools import chain, combinations
 import numpy as np
 from functools import reduce
+import matplotlib.pyplot as plt
 
 def powerset(list_name):
     s = list(list_name)
@@ -26,6 +27,9 @@ for x in powerset(numbs):
 print(combs)
 baseDelay = 10000
 best =[[],[]]
+
+demoras = []
+confiabilidades = []
 for i in combs:
     for j in combs:
         delay = 0
@@ -40,15 +44,21 @@ for i in combs:
             aux *= (1-conf[k])
             delay+=delays[k]
         y = 1-aux
-       
+        print("conf: ",x*y," delay: ", delay, " vfn 1:",i," vnf 2: ",j)
+        confiabilidades.append(x*y)
+        demoras.append(delay)
         if(x*y>confmin):
             
             if (baseDelay>=delay) :
-                print("conf: ",x*y," delay: ", delay, " vfn 1:",i," vnf 2: ",j)
+                
                 baseDelay = delay
                 best[0] = i
                 best[1] = j
 print("minimo delay :", baseDelay, " vnfs ", best)
 
-       
-            
+
+fig, ax = plt.subplots()
+ax.scatter(demoras, confiabilidades)
+ax.hlines(y=confmin, xmin=0, xmax=12, linewidth=2, color='r')
+
+plt.show()
