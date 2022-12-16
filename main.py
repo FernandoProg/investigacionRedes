@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import sys
+# pip install matplotlib, numpy
 
 start = time.time()
 
