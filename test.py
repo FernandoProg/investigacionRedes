@@ -29,7 +29,7 @@ def amend():
             population[i, np.random.randint(typeVNF, size=1)[0], j] = 1
     return None
 
-if len(sys.argv) == 5:  # py.exe .\main.py 1 0.1 1000 5 0.98
+if len(sys.argv) == 5:  # py.exe .\test.py 1 0.1 1000 5
     seed = int(sys.argv[1])
     prob_mut = float(sys.argv[2])
     num_ite = int(sys.argv[3])
@@ -50,9 +50,10 @@ arrConfiability = np.genfromtxt('.\VNFs.csv', delimiter=',', usecols=(0), max_ro
 arrDelay = np.genfromtxt('.\VNFs.csv', delimiter=',', usecols=(1), max_rows=typeVNF, skip_header=3, dtype=float)        # Arreglo de delays por VNF
 resp_num_ite = num_ite
 resp_seed = seed
-min_array = np.array([0.95, 0.97, 0.99])
+min_array = np.array([0.975, 0.987, 0.99, 0.998])
+k_components = np.array([4, 9, 14, 19, 24])
 best_redundant_array = []
-while redundantVNF < 6:
+for redundantVNF in k_components:
     array_of_conf = []
     for minConfiability in min_array:
         best_VNF = np.inf
@@ -132,12 +133,16 @@ while redundantVNF < 6:
         array_of_conf.append(best_delay_array)
         best_redundant_array.append(best_VNF)
     redundantVNF += 1
-best_redundant_array_reshaped = np.array(best_redundant_array).reshape(3, 4)
+best_redundant_array_reshaped = np.array(best_redundant_array).reshape(min_array.shape[0], k_components.shape[0])
 print(best_redundant_array_reshaped)
 fig, ax= plt.subplots()
-ax.plot([2, 3,4,5], best_redundant_array_reshaped[0, :], color='tab:blue')
-ax.plot([2, 3,4,5], best_redundant_array_reshaped[1, :], color='tab:red')
-ax.plot([2, 3,4,5], best_redundant_array_reshaped[2, :], color='tab:green')
+l1, = ax.plot(k_components, best_redundant_array_reshaped[0, :], color='tab:blue')
+l2, = ax.plot(k_components, best_redundant_array_reshaped[1, :], color='tab:red')
+l3, = ax.plot(k_components, best_redundant_array_reshaped[2, :], color='tab:green')
+l4, = ax.plot(k_components, best_redundant_array_reshaped[3, :], color='tab:cyan')
+ax.legend([l1, l2, l3, l4], ['97.5%', '98.7%', '99%', '99.8%'], loc='upper left')
+ax.set_xlabel('Número de componentes paralelos k')
+ax.set_ylabel('Total de VNFs instanciadas')
 plt.show()
 # tiempo ejecución
 end = time.time()
