@@ -134,15 +134,14 @@ for redundantVNF in k_components:
         best_redundant_array.append(best_VNF)
     redundantVNF += 1
 best_redundant_array_reshaped = np.array(best_redundant_array).reshape(min_array.shape[0], k_components.shape[0])
-print(best_redundant_array_reshaped)
 fig, ax= plt.subplots()
 l1, = ax.plot(k_components, best_redundant_array_reshaped[0, :], color='tab:blue')
 l2, = ax.plot(k_components, best_redundant_array_reshaped[1, :], color='tab:red')
 l3, = ax.plot(k_components, best_redundant_array_reshaped[2, :], color='tab:green')
 l4, = ax.plot(k_components, best_redundant_array_reshaped[3, :], color='tab:cyan')
-ax.legend([l1, l2, l3, l4], ['97.5%', '98.7%', '99%', '99.8%'], loc='upper left')
+ax.legend([l4, l3, l2, l1], ['99.8%', '99%', '98.7%', '97.5%'], loc='upper left')
 ax.set_xlabel('Número de componentes paralelos k')
-ax.set_ylabel('Total de VNFs instanciadas')
+ax.set_ylabel('Numero de componentes instanciados')
 plt.show()
 # tiempo ejecución
 end = time.time()
